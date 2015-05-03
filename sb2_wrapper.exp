@@ -1,0 +1,31 @@
+#!/usr/bin/expect -f
+
+set timeout -1
+set arguments [lindex $argv 0]
+
+puts $arguments
+spawn sb2 -t nemo-n950 -m sdk-install -R $arguments
+
+expect {
+  "Continue\? ?y\/n\/\?\] \(y\): " {
+    send "y\r"  
+    exp_continue
+  }
+  "File 'repomd.xml' from repository 'mer-project' is unsigned, continue\? ?yes\/no\] \(no\): " {
+    send "y\r"
+    exp_continue
+  }
+  "Abort, retry, ignore\? ?a\/r\/i\] \(a\): " {
+    send "i\r"
+    exp_continue
+  }
+  "Abort, retry, ignore\? ?a\/r\/i/\?\] \(a\): " {
+    send "i\r"
+    exp_continue
+  }
+  eof {
+    exit
+  }
+}
+
+
